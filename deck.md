@@ -76,5 +76,69 @@ This is the entirety of `nvim/init.lua`. Super simple, just pointing to the
 
 ---
 
-# Settings
+# Settings: Line Numbers and Tabs
+Now for `set.lua`.
 
+Line numbers are a necessity. Even better though are relative line numbers.
+```lua
+vim.opt.number = true
+vim.opt.relativenumber = true
+```
+
+And consistent, beautiful tabs:
+```lua
+vim.opt.tabstop = 4
+vim.opt.softtabstop = 4
+vim.opt.shiftwidth = 4
+vim.opt.expandtab = true
+
+vim.opt.smartindent = true
+```
+
+---
+
+# Settings: Grab Bag
+Persistent undo progress between sessions:
+```lua
+vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
+vim.opt.undofile = true
+```
+24bit color:
+```lua
+vim.opt.termguicolors = true
+```
+Scrolloff:
+```lua
+vim.opt.scrolloff = 8
+```
+Diagnostics Column:
+```lua
+vim.opt.signcolumn = "yes"
+```
+
+---
+
+# Remaps: Pure Power
+The `<leader>` key is a namespace for user managed shortcuts, by default it is '\\'. It can be remaped like so:
+```lua
+vim.g.mapleader = " " -- Sets leader to space
+```
+
+The general recipe for a remap is as follows:
+```lua
+vim.keymap.set('<mode>', '<shortcut>', '<command>', {<opts>})
+```
+
+---
+
+# Two Useful Remaps:
+
+Sometimes fuzzy finding isn't enough, so we like to access the file explorer:
+```lua
+vim.keymap.set("n", "<leader>e", vim.cmd.Ex)
+```
+
+Sometimes we need code on our system clipboard, we can do that with another remap:
+```lua
+vim.keymap.set('v', '<leader>y', '"+y', { noremap = true, silent = true })
+```
