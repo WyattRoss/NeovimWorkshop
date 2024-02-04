@@ -1,7 +1,8 @@
 return {
     "numToStr/FTerm.nvim",
     config = function()
-        vim.keymap.set('n', '<A-t>', '<CMD>lua require("FTerm").toggle()<CR>')
-        vim.keymap.set('t', '<A-t>', '<CMD>lua require("FTerm").toggle()<CR>')
+        local fterm = require("FTerm")
+        vim.keymap.set('n', '<A-t>', fterm.toggle)
+        vim.keymap.set('t', '<A-t>', fterm.toggle)
     end
 }

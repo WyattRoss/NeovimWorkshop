@@ -69,18 +69,17 @@ nvim
 # Initialization
 
 ```lua
+-- init.lua
 require("config")
 ```
-This is the entirety of `nvim/init.lua`. Super simple, just pointing to the
 `nvim/lua/config` folder. The `init.lua` contained with that folder will be similarly simple.
 
 ---
 
 # Settings: Line Numbers and Tabs
-Now for `set.lua`.
-
 Line numbers are a necessity. Even better though are relative line numbers.
 ```lua
+-- lua/config/set.lua
 vim.opt.number = true
 vim.opt.relativenumber = true
 ```
@@ -121,6 +120,7 @@ vim.opt.signcolumn = "yes"
 # Remaps: Pure Power
 The `<leader>` key is a namespace for user managed shortcuts, by default it is '\\'. It can be remaped like so:
 ```lua
+-- lua/config/remaps.lua
 vim.g.mapleader = " " -- Sets leader to space
 ```
 
@@ -142,3 +142,72 @@ Sometimes we need code on our system clipboard, we can do that with another rema
 ```lua
 vim.keymap.set('v', '<leader>y', '"+y', { noremap = true, silent = true })
 ```
+
+---
+
+# Plugins!
+
+To add plugins to NeoVim we need a plugin manager. For this example we're going to use [Lazy.nvim](https://github.com/folke/lazy.nvim).
+
+```lua
+-- lua/config/lazy.lua
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
+  })
+end
+vim.opt.rtp:prepend(lazypath)
+
+require("lazy").setup("plugin") -- Sources the plugin folder from earlier to manage plugins from
+```
+---
+
+# Adding a Color Scheme
+```lua
+-- lua/plugin/colors.lua
+return {
+    "EdenEast/nightfox.nvim", -- installs plugin containing the color scheme
+    init = function ()
+        vim.cmd([[colorscheme carbonfox]]) -- sets color scheme on initialization
+    end
+}
+```
+
+I set up [Nightfox](https://github.com/EdenEast/nightfox.nvim) in this example because it's what I use, but there are plenty of others listed at https://vimcolorschemes.com/.
+
+---
+
+# Telescope: A Fuzzy Finder for the 21st Century
+
+- Fuzzy search across an entire project.
+- Extensible, search with dozens of built in filters and any number of custom ones.
+- Configurable preview window of whatever file you're navigating to.
+
+```lua
+-- lua/plugin/telescope.lua
+return {
+   {
+      "nvim-telescope/telescope.nvim",
+      tag = "0.1.5",
+      dependencies = { "nvim-lua/plenary.nvim" },
+      init = function()
+         local builtin = require("telescope.builtin")
+         vim.keymap.set("n", "<leader>ff", builtin.find_files, {}) -- File search by name
+         vim.keymap.set("n", "<leader>fg", builtin.live_grep, {}) -- Search file contents using ripgrep
+         vim.keymap.set("n", "<leader>fb", builtin.buffers, {}) -- Search open buffers
+         vim.keymap.set("n", "<leader>fh", builtin.help_tags, {}) -- Search nvim documentation
+      end,
+   },
+}
+```
+
+---
+
+# A Terminal Window
+
