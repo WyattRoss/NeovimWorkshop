@@ -1,6 +1,11 @@
 return {
     'nvim-treesitter/nvim-treesitter',
-    init = function ()
-        run = ':TSUpdate'
+    config = function ()
+        vim.cmd(":TSUpdate")
+        local treesitter = require("nvim-treesitter.configs")
+        treesitter.setup({
+            ensure_installed = { "lua" },
+            highlight = { enable = true },
+        })
     end
 }

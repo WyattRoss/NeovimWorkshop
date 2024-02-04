@@ -131,7 +131,7 @@ vim.keymap.set('<mode>', '<shortcut>', '<command>', {<opts>})
 
 ---
 
-# Two Useful Remaps:
+# Two Useful Remaps
 
 Sometimes fuzzy finding isn't enough, so we like to access the file explorer:
 ```lua
@@ -168,12 +168,33 @@ require("lazy").setup("plugin") -- Sources the plugin folder from earlier to man
 ```
 ---
 
+# A Recipe for Installing Plugins
+
+Many plugins will give explicit instructions on how to install them using Lazy.nvim, but not always in exactly the right way for the samples included in this workshop.
+```lua
+-- Create a file in nvim/lua/plugin/<plugin_name>.lua
+return {
+    "GithubUser/PluginName",
+    dependencies = { -- optional
+        {"GithubUser/Dependency1"},
+        {"GithubUser/Dependency2"},
+    }
+    config = function()
+        require("PluginName").config() --not always necessary
+
+        vim.keymap.set("n", "<mapping>", "<action>") -- I like to keep plugin specific remaps in the installation file
+    end
+}
+```
+
+---
+
 # Adding a Color Scheme
 ```lua
 -- lua/plugin/colors.lua
 return {
     "EdenEast/nightfox.nvim", -- installs plugin containing the color scheme
-    init = function ()
+    init = function () -- We use init instead of config here so the function executes on startup instead of plugin load
         vim.cmd([[colorscheme carbonfox]]) -- sets color scheme on initialization
     end
 }
@@ -196,7 +217,7 @@ return {
       "nvim-telescope/telescope.nvim",
       tag = "0.1.5",
       dependencies = { "nvim-lua/plenary.nvim" },
-      init = function()
+      config = function()
          local builtin = require("telescope.builtin")
          vim.keymap.set("n", "<leader>ff", builtin.find_files, {}) -- File search by name
          vim.keymap.set("n", "<leader>fg", builtin.live_grep, {}) -- Search file contents using ripgrep
@@ -211,3 +232,83 @@ return {
 
 # A Terminal Window
 
+Sometimes you just need to use the terminal. There are many approaches to having an integrated terminal, but I like a floating window.
+```lua
+return {
+    "numToStr/FTerm.nvim",
+    config = function()
+        local fterm = require("FTerm")
+        vim.keymap.set('n', '<A-t>', fterm.toggle)
+        vim.keymap.set('t', '<A-t>', fterm.toggle)
+    end
+}
+```
+
+---
+
+# LSP: Putting it all together
+
+We're going to use an abstraction of LSP configuration called [lsp-zero](https://github.com/VonHeikemen/lsp-zero.nvim).
+
+A few useful LSP-Zero features:
+- Server installation through Mazon.nvim
+- Server configuration with nvim-lspconfig
+- Completion with nvim-cmp
+
+---
+
+# LSP-ZERO Configuration
+```lua
+return {
+    'VonHeikemen/lsp-zero.nvim',
+    event = "VeryLazy", -- All of the other plugins are small so I didn't bother lazy loading them. LSP is heavy though
+    branch = 'v2.x',
+    dependencies = {
+        { 'neovim/nvim-lspconfig' },
+        {'williamboman/mason.nvim'},
+        { 'hrsh7th/nvim-cmp' },
+        { 'hrsh7th/cmp-nvim-lsp' },
+        { 'L3MON4D3/LuaSnip' },
+        { 'SmiteshP/nvim-navic' }
+    },
+    config = function()
+
+        local lsp = require('lsp-zero')
+        lsp.preset('recommended')
+
+        lsp.on_attach(function(client, bufnr)
+            lsp.default_keymaps({buffer = bufnr})
+        end)
+        lsp.setup()
+
+        lsp.ensure_installed({ "lua_ls" })
+
+        -- A bunch of keymaps for IDE-like actions
+        vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+        vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
+        vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
+        vim.keymap.set("n", "<leader>vd", vim.diagnostic.open_float, opts)
+        vim.keymap.set("n", "[d", vim.diagnostic.goto_next, opts)
+        vim.keymap.set("n", "]d", vim.diagnostic.goto_prev, opts)
+        vim.keymap.set("n", "<leader>vca", vim.lsp.buf.code_action, opts)
+        vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
+        vim.keymap.set("i", "<C-h>", vim.lsp.buf.signature_help, opts)
+        vim.keymap.set("n", "<leader>cc", vim.cmd.cclose)
+
+        local cmp = require('cmp')
+        local cmp_select = {behavior = cmp.SelectBehavior.Select}
+
+        -- completion settings
+        cmp.setup({
+            mapping = {
+                ['<CR>'] = cmp.mapping.confirm({select = false}),
+                ['<C-k>'] = cmp.mapping.scroll_docs(-4),
+                ['<C-j>'] = cmp.mapping.scroll_docs(4),
+            },
+            window = {
+                documentation = cmp.config.window.bordered(),
+            }
+        })
+    end
+}
+```
