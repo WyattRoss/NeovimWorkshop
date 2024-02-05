@@ -335,6 +335,8 @@ return {
 }
 ```
 
+---
+
 # Closing notes
 General tips: 
 - Organize your dotfiles (and all text configs) in a git repo. Doing it in a bare git repo makes this relatively painless. [Relevant article](https://www.atlassian.com/git/tutorials/dotfiles)
@@ -344,3 +346,7 @@ Plugin honorable mentions:
 - nvim-autopairs: Automatic quotes and brackets, can even be made more context aware with treesitter.
 - undotree: Allows for undo branching, you'll never lose work by accident again (or at least less commonly).
 - Some sort of statusline plugin; I use lualine.nvim, but there are viable alternatives. Can give (like LSP status) useful information and looks nice.
+
+---
+
+The markdown source of this presentation and the sample configuration used in examples are Open Source (MIT) and available at https://github.com/WyattRoss/NeovimWorkshop
