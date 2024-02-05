@@ -4,7 +4,7 @@ return {
         vim.cmd(":TSUpdate")
         local treesitter = require("nvim-treesitter.configs")
         treesitter.setup({
-            ensure_installed = { "lua" },
+            auto_install = true,
             highlight = { enable = true },
         })
     end

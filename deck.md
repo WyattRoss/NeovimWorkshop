@@ -32,7 +32,7 @@
     - LSP
     - A fuzzy finder
     - Autocompletion
-    - A popup terminal (nice to have)
+    - A popup terminal
 
 ---
 
@@ -312,3 +312,35 @@ return {
     end
 }
 ```
+
+---
+
+# Treesitter: Better Syntax Highlighting
+
+Treesitter is a parsing library which improves on a lot of things NeoVim uses regex for.
+- Code folding
+- Syntax Highlighting
+- Syntax based querying (there's even a Telescope filter for it!)
+```lua
+return {
+    'nvim-treesitter/nvim-treesitter',
+    config = function ()
+        vim.cmd(":TSUpdate")
+        local treesitter = require("nvim-treesitter.configs")
+        treesitter.setup({
+            auto_install = true,
+            highlight = { enable = true },
+        })
+    end
+}
+```
+
+# Closing notes
+General tips: 
+- Organize your dotfiles (and all text configs) in a git repo. Doing it in a bare git repo makes this relatively painless. [Relevant article](https://www.atlassian.com/git/tutorials/dotfiles)
+- If you need to learn Vim motions, if you have normal Vim installed, the `Vimtutor` command will give you a good introduction.
+
+Plugin honorable mentions:
+- nvim-autopairs: Automatic quotes and brackets, can even be made more context aware with treesitter.
+- undotree: Allows for undo branching, you'll never lose work by accident again (or at least less commonly).
+- Some sort of statusline plugin; I use lualine.nvim, but there are viable alternatives. Can give (like LSP status) useful information and looks nice.
