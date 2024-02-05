@@ -5,4 +5,4 @@ This repository contains the materials I used for a workshop about neovim. The c
 - A sample configuration made for use in that workshop
 - This document
 
-The slilde deck was intended to be rendered to a slide deck using [Marp](https://marp.app/)
+The slide deck was intended to be rendered to a slide deck using [Marp](https://marp.app/)
