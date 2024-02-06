@@ -1,6 +1,6 @@
 return {
     "EdenEast/nightfox.nvim",
     init = function ()
-        vim.cmd([[colorscheme carbonfox]])
+        vim.cmd("colorscheme carbonfox")
     end
 }

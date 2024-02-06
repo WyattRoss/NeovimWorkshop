@@ -195,7 +195,7 @@ return {
 return {
     "EdenEast/nightfox.nvim", -- installs plugin containing the color scheme
     init = function () -- We use init instead of config here so the function executes on startup instead of plugin load
-        vim.cmd([[colorscheme carbonfox]]) -- sets color scheme on initialization
+        vim.cmd("colorscheme carbonfox") -- sets color scheme on initialization
     end
 }
 ```
@@ -262,7 +262,7 @@ A few useful LSP-Zero features:
 -- lsp.lua
 return {
     'VonHeikemen/lsp-zero.nvim',
-    event = "VeryLazy",
+    event = "BufEnter",
     branch = 'v2.x',
     dependencies = {
         { 'neovim/nvim-lspconfig' },
@@ -271,18 +271,17 @@ return {
         { 'hrsh7th/nvim-cmp' },
         { 'hrsh7th/cmp-nvim-lsp' },
         { 'L3MON4D3/LuaSnip' },
-        { 'SmiteshP/nvim-navic' }
     },
     config = function()
 
         local lsp = require('lsp-zero')
         lsp.preset('recommended')
-        lsp.on_attach(function(client, bufnr)
+        lsp.on_attach(function(_, bufnr)
             lsp.default_keymaps({buffer = bufnr})
         end)
         lsp.setup()
 
-        require('mason').setup({})
+        require('mason').setup()
         require('mason-lspconfig').setup({
             ensure_installed = {},
             handlers = {
@@ -290,19 +289,18 @@ return {
             },
         })
 
-        vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
-        vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
-        vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
-        vim.keymap.set("n", "<leader>vd", vim.diagnostic.open_float, opts)
-        vim.keymap.set("n", "[d", vim.diagnostic.goto_next, opts)
-        vim.keymap.set("n", "]d", vim.diagnostic.goto_prev, opts)
-        vim.keymap.set("n", "<leader>vca", vim.lsp.buf.code_action, opts)
-        vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
-        vim.keymap.set("i", "<C-h>", vim.lsp.buf.signature_help, opts)
+        vim.keymap.set("n", "gd", vim.lsp.buf.definition)
+        vim.keymap.set("n", "gr", vim.lsp.buf.references)
+        vim.keymap.set("n", "K", vim.lsp.buf.hover)
+        vim.keymap.set("n", "<leader>vd", vim.diagnostic.open_float)
+        vim.keymap.set("n", "[d", vim.diagnostic.goto_next)
+        vim.keymap.set("n", "]d", vim.diagnostic.goto_prev)
+        vim.keymap.set("n", "<leader>vca", vim.lsp.buf.code_action)
+        vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename)
+        vim.keymap.set("i", "<C-h>", vim.lsp.buf.signature_help)
         vim.keymap.set("n", "<leader>cc", vim.cmd.cclose)
 
         local cmp = require('cmp')
-        local cmp_select = {behavior = cmp.SelectBehavior.Select}
 
         cmp.setup({
             mapping = {
@@ -327,14 +325,18 @@ Treesitter is a parsing library which improves on a lot of things NeoVim uses re
 - Syntax Highlighting
 - Syntax based querying (there's even a Telescope filter for it!)
 ```lua
+-- treesitter.lua
 return {
     'nvim-treesitter/nvim-treesitter',
+    build = ":TSUpdate",
     config = function ()
-        vim.cmd(":TSUpdate")
-        local treesitter = require("nvim-treesitter.configs")
-        treesitter.setup({
-            auto_install = true,
+        local configs = require("nvim-treesitter.configs")
+
+        configs.setup({
+            ensure_installed = {"lua", "rust"},
+            sync_install = false,
             highlight = { enable = true },
+            indent = { enable = true },
         })
     end
 }
