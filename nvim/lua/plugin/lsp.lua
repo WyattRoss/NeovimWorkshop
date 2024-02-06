@@ -5,6 +5,7 @@ return {
     dependencies = {
         { 'neovim/nvim-lspconfig' },
         {'williamboman/mason.nvim'},
+        {'williamboman/mason-lspconfig.nvim'},
         { 'hrsh7th/nvim-cmp' },
         { 'hrsh7th/cmp-nvim-lsp' },
         { 'L3MON4D3/LuaSnip' },
@@ -19,7 +20,13 @@ return {
         end)
         lsp.setup()
 
-        lsp.ensure_installed({ "lua_ls" })
+        require('mason').setup({})
+        require('mason-lspconfig').setup({
+            ensure_installed = {},
+            handlers = {
+                lsp.default_setup,
+            },
+        })
 
         vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
         vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
@@ -47,3 +54,4 @@ return {
         })
     end
 }
+

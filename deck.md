@@ -259,13 +259,15 @@ A few useful LSP-Zero features:
 
 # LSP-ZERO Configuration
 ```lua
+-- lsp.lua
 return {
     'VonHeikemen/lsp-zero.nvim',
-    event = "VeryLazy", -- All of the other plugins are small so I didn't bother lazy loading them. LSP is heavy though
+    event = "VeryLazy",
     branch = 'v2.x',
     dependencies = {
         { 'neovim/nvim-lspconfig' },
         {'williamboman/mason.nvim'},
+        {'williamboman/mason-lspconfig.nvim'},
         { 'hrsh7th/nvim-cmp' },
         { 'hrsh7th/cmp-nvim-lsp' },
         { 'L3MON4D3/LuaSnip' },
@@ -275,15 +277,19 @@ return {
 
         local lsp = require('lsp-zero')
         lsp.preset('recommended')
-
         lsp.on_attach(function(client, bufnr)
             lsp.default_keymaps({buffer = bufnr})
         end)
         lsp.setup()
 
-        lsp.ensure_installed({ "lua_ls" })
+        require('mason').setup({})
+        require('mason-lspconfig').setup({
+            ensure_installed = {},
+            handlers = {
+                lsp.default_setup,
+            },
+        })
 
-        -- A bunch of keymaps for IDE-like actions
         vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
         vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
         vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
@@ -298,7 +304,6 @@ return {
         local cmp = require('cmp')
         local cmp_select = {behavior = cmp.SelectBehavior.Select}
 
-        -- completion settings
         cmp.setup({
             mapping = {
                 ['<CR>'] = cmp.mapping.confirm({select = false}),
