@@ -324,6 +324,11 @@ Treesitter is a parsing library which improves on a lot of things NeoVim uses re
 - Code folding
 - Syntax Highlighting
 - Syntax based querying (there's even a Telescope filter for it!)
+
+---
+
+# Treesitter (continued)
+
 ```lua
 -- treesitter.lua
 return {
