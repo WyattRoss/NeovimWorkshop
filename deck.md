@@ -338,7 +338,7 @@ return {
         local configs = require("nvim-treesitter.configs")
 
         configs.setup({
-            ensure_installed = {"lua", "rust"},
+            ensure_installed = {"lua"},
             sync_install = false,
             highlight = { enable = true },
             indent = { enable = true },
@@ -352,7 +352,7 @@ return {
 # Closing notes
 General tips: 
 - Organize your dotfiles (and all text configs) in a git repo. Doing it in a bare git repo makes this relatively painless. [Relevant article](https://www.atlassian.com/git/tutorials/dotfiles)
-- If you need to learn Vim motions, if you have normal Vim installed, the `Vimtutor` command will give you a good introduction.
+- If you need to learn Vim motions, open neovim and use the `:Tutor` command, that will walk you through the basics at least.
 
 Plugin honorable mentions:
 - nvim-autopairs: Automatic quotes and brackets, can even be made more context aware with treesitter.
