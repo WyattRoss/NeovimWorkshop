@@ -178,9 +178,9 @@ return {
     dependencies = { -- optional
         {"GithubUser/Dependency1"},
         {"GithubUser/Dependency2"},
-    }
+    },
     config = function()
-        require("PluginName").config() --not always necessary
+        require("PluginName").setup() --not always necessary
 
         vim.keymap.set("n", "<mapping>", "<action>") -- I like to keep plugin specific remaps in the installation file
     end
