@@ -1,4 +1,4 @@
-# Zero to LSP
+# Practical Configuration
 ## NeoVim as your editor
 
 ---
@@ -6,7 +6,7 @@
 # Contents in summary
 - Why should we use NeoVim?
 - Why should we make a configuration ourselves?
-- How can we make a configuration in a way that is simple, effective, and extensible?
+- How can we make a configuration in a way that is simple, robust, and extensible?
 
 ---
 
@@ -72,8 +72,13 @@ nvim
 -- init.lua
 require("config")
 ```
-`nvim/lua/config` folder. The `init.lua` contained with that folder will be similarly simple.
 
+```lua
+-- lua/config/init.lua
+require("config.set")
+require("config.remaps")
+require("config.lazy")
+```
 ---
 
 # Settings: Line Numbers and Tabs
@@ -204,7 +209,7 @@ I set up [Nightfox](https://github.com/EdenEast/nightfox.nvim) in this example b
 
 ---
 
-# Telescope: A Fuzzy Finder for the 21st Century
+# [Telescope](https://github.com/nvim-telescope/telescope.nvim): A Fuzzy Finder for the 21st Century
 
 - Fuzzy search across an entire project.
 - Extensible, search with dozens of built in filters and any number of custom ones.
@@ -230,7 +235,7 @@ return {
 
 ---
 
-# A Terminal Window
+# [FTerm](https://github.com/numToStr/FTerm.nvim): A Simple, Floating Terminal Window
 
 Sometimes you just need to use the terminal. There are many approaches to having an integrated terminal, but I like a floating window.
 ```lua
@@ -266,8 +271,8 @@ return {
     branch = 'v2.x',
     dependencies = {
         { 'neovim/nvim-lspconfig' },
-        {'williamboman/mason.nvim'},
-        {'williamboman/mason-lspconfig.nvim'},
+        { 'williamboman/mason.nvim' },
+        { 'williamboman/mason-lspconfig.nvim' },
         { 'hrsh7th/nvim-cmp' },
         { 'hrsh7th/cmp-nvim-lsp' },
         { 'L3MON4D3/LuaSnip' },
@@ -320,7 +325,7 @@ return {
 
 # Treesitter: Better Syntax Highlighting
 
-Treesitter is a parsing library which improves on a lot of things NeoVim uses regex for.
+[Treesitter](https://github.com/nvim-treesitter/nvim-treesitter) is a parsing library which improves on a lot of things NeoVim uses regex for.
 - Code folding
 - Syntax Highlighting
 - Syntax based querying (there's even a Telescope filter for it!)
